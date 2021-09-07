@@ -6,12 +6,12 @@
         <img src="../assets/logo.png" alt="" />
       </div>
       <!-- 登录表单区 -->
-      <el-form :model="loginFrom"  class="login-from">
+      <el-form :model="loginForm" :rules="rules"  class="login-from">
         <el-form-item prop="username">
-          <el-input v-model="loginFrom.username" prefix-icon="iconfont icon-usercenter"></el-input>
+          <el-input v-model="loginForm.username" prefix-icon="iconfont icon-usercenter"></el-input>
         </el-form-item>
         <el-form-item prop="password"> 
-          <el-input type="password" v-model="loginFrom.password" prefix-icon="iconfont icon-password"></el-input>
+          <el-input type="password" v-model="loginForm.password" prefix-icon="iconfont icon-password"></el-input>
         </el-form-item>
         <el-form-item>
           <div class="btns">
@@ -25,32 +25,29 @@
 </template>
 
 <script>
-import { validate_password } from '../utils/validate'
+
 export default {
   name: "Login",
   data() {
      // 检验密码
-    const validate_password_rules = (rule, value, callback) => {
-      let regPassword = validate_password(value);
-      let passwords_value = loginFrom.passwords;
-      if (value === "") {
-        callback(new Error("请输入密码"));
-      } else if(!regPassword){
-        callback(new Error("请入 >=6 并且 <= 20 位的密码，包含数字、字母"));
-      } else if(passwords_value && passwords_value !== value) {
-        callback(new Error("两次密码不一致，请重新输入"));
-      } else {
-        callback();
-      }
-    };
+    const validatePass = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入密码'));
+        } else {
+          if (this.ruleForm.checkPass !== '') {
+            this.$refs.ruleForm.validateField('checkPass');
+          }
+          callback();
+        }
+      };
     
     return {
-      loginFrom: {
+      loginForm: {
         username: '',
         password: ''
       },
       rules: {
-        passsword: [{ validator: validate_password_rules }]
+        passsword: [{ validator: validatePass }]
       }
       
     }
