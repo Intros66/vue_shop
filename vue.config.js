@@ -57,10 +57,10 @@ module.exports = {
     hotOnly: false,
     proxy: {
       [process.env.VUE_SHOP_API]: {
-          [process.VUE_API_DEV_TARGET]: 'http://127.0.0.1:8888/api/private/v1', //API服务器的地址
+          target: process.env.VUE_API_DEV_TARGET, //API服务器的地址
           changeOrigin: true,
           pathRewrite: {
-              [`^${[process.env.VUE_SHOP_API]}`]: ''
+              [`^${process.env.VUE_SHOP_API}`]: ''
           }
       },
     }

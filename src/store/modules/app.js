@@ -1,4 +1,4 @@
-import { setToken, setUsername, getUsername, removeToken, removeUsername  } from '@/utils/cookie'
+import { setToken, setUsername, getUsername, removeToken, removeUsername } from '@/utils/cookie'
 import { Login, Logout } from '@/api/login';
 
 const state = {
@@ -25,7 +25,6 @@ const actions = {
     logoutAction({ commit }) {
         return  new Promise((resolve, reject) => {
             Logout().then( response => {
-                console.log(response);
                 removeToken();
                 removeUsername();
                 commit('SET_TOKEN', '');
@@ -40,11 +39,9 @@ const actions = {
 
 const mutations = {
     SET_TOKEN(state, value){
-        console.log('token的值: ' + value);
         state.token = value
     },
     SET_USERNAME(state, value){
-        console.log('username的值: ' + value);
         state.username = value
     }
 }

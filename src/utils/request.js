@@ -12,7 +12,7 @@ const service = axios.create({
 // 请求拦截器
 service.interceptors.request.use( (config) => {
     // 在发送请求前做什么
-    config.headers['Token'] = getToken(); // 携带token
+    config.headers['Authorization'] = getToken(); // 携带token
     config.headers['Username'] = getUsername(); // 携带token
     return config
 }, (error) => {

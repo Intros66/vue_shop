@@ -79,7 +79,6 @@ export default {
       this.$refs[formName].validate( async (valid) => {
         if (valid) {
           this.$store.dispatch('app/loginAction', this.loginForm).then( res => {
-            console.log(res);
             this.$message({
               type: 'success',
               message: res.meta.msg

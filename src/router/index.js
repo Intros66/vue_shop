@@ -18,7 +18,8 @@ const routes = [
     path: '/home',
     name: 'Home',
     component: () => import('../views/home/index.vue')
-  }
+  },
+
 ];
 
 const router = new VueRouter({
