@@ -83,7 +83,7 @@ export default {
               type: 'success',
               message: res.meta.msg
             })
-            this.$router.push('/home')
+            this.$router.push('/consoleIndex')
           }).catch( () => {
             this.resetForm();
           })

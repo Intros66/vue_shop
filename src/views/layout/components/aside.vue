@@ -2,7 +2,7 @@
   <div>
     <div class="toggle-button" @click="toggleCollapse">|||</div>
     <el-menu
-      default-active="0"
+      :default-active="activePath"
       class="el-menu-vertical-demo"
       background-color="#333744"
       text-color="#fff"
@@ -23,6 +23,7 @@
           :index="'/' + child.path"
           v-for="child in menu.children"
           :key="child.id"
+          @click="saveNavState('/' + child.path)"
         >
           <template slot="title">
             <i class="el-icon-menu"></i>
@@ -51,22 +52,28 @@ export default {
         id: "",
       },
       isCollapse: false,
-      parentWidth: ''
+      parentWidth: '',
+      // 被激活的链接地址
+      activePath: ''
     };
   },
   created() {
     this.getMenuList();
+    this.activePath = sessionStorage.getItem('activePath')
   },
   methods: {
     async getMenuList() {
       const { data: res } = await FindMenuTree();
       this.menuList = res;
-      console.log(res[0]);
     },
     toggleCollapse(){
       this.isCollapse = !this.isCollapse
       this.parentWidth = this.isCollapse ? '64px' : '200px'
       this.$emit("update:width", this.parentWidth)
+    },
+    // 保存链接的激活状态
+    saveNavState(activePath){
+      sessionStorage.setItem('activePath', activePath)
     }
   },
 };

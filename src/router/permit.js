@@ -13,3 +13,12 @@ router.beforeEach((to, from, next) => {
         }
     }
 })
+
+// 后置路由
+router.afterEach((to, from) => {
+    if(to.meta.title){
+        document.title = to.meta.title
+    }else {
+        document.title = '后台管理系统'
+    }
+})
