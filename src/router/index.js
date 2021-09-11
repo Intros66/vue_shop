@@ -49,6 +49,22 @@ const routes = [
         component: () => import('../views/user/index.vue')
       }
     ]
+  },
+  // 权限管理
+  {
+    path: '/role_right',
+    name: 'role',
+    component: Layout,
+    children: [
+      {
+        path: '/rights',
+        name: 'Rights',
+        meta: {
+          title: '权限列表'
+        },
+        component: () => import('../views/power/Rights.vue')
+      }
+    ]
   }
 
 ];

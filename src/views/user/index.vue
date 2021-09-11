@@ -1,13 +1,7 @@
 <template>
   <div>
     <!-- 面包屑导航区域 -->
-    <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/consoleIndex' }"
-        >首页</el-breadcrumb-item
-      >
-      <el-breadcrumb-item>用户管理</el-breadcrumb-item>
-      <el-breadcrumb-item>用户列表</el-breadcrumb-item>
-    </el-breadcrumb>
+    <Breadcrumb :breadcrumb_config="bread_config"></Breadcrumb>
 
     <!-- 卡片视图 -->
     <el-card>
@@ -21,10 +15,24 @@
           <el-button type="primary">添加用户</el-button>
         </el-col>
       </el-row>
-
+      <!-- <Table :config="table_config" :data="tableData"> -->
+        <!--禁启用-->
+        <!-- <template v-slot:status="slotData">
+          <el-switch
+            :disabled="slotData.data.id == switch_disabled"
+            @change="changeUserState(slotData.data)"
+            v-model="slotData.data.status"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+          >
+          </el-switch>
+        </template>
+      </Table> -->
       <!-- 用户列表 -->
       <el-table
-        :data="tableData.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
+        :data="
+          tableData.slice((currentPage - 1) * pageSize, currentPage * pageSize)
+        "
         border
         stripe
       >
@@ -40,7 +48,7 @@
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="emial"
+          prop="email"
           label="邮箱"
           width="180"
           align="center"
@@ -70,7 +78,7 @@
               class="item"
               effect="dark"
               content="修改用户"
-              placement="top" 
+              placement="top"
             >
               <el-button
                 type="primary"
@@ -125,16 +133,19 @@
 </template>
 
 <script>
+import Breadcrumb from "../../components/breadcrumb/index.vue";
+import Table from "../../components/table/index.vue";
 import { getUser } from "../../api/user";
 export default {
   name: "Users",
+  components: { Breadcrumb, Table },
   data() {
     return {
       tableData: [
         {
           index: 1,
           username: "张三",
-          emial: "123@123.com",
+          email: "123@123.com",
           mobile: "13522233312",
           role_name: "超管",
           ms_state: true,
@@ -142,7 +153,7 @@ export default {
         {
           index: 2,
           username: "张三",
-          emial: "123@123.com",
+          email: "123@123.com",
           mobile: "13522233312",
           role_name: "超管",
           ms_state: true,
@@ -150,7 +161,7 @@ export default {
         {
           index: 3,
           username: "张三",
-          emial: "123@123.com",
+          email: "123@123.com",
           mobile: "13522233312",
           role_name: "超管",
           ms_state: true,
@@ -158,7 +169,7 @@ export default {
         {
           index: 4,
           username: "张三",
-          emial: "123@123.com",
+          email: "123@123.com",
           mobile: "13522233312",
           role_name: "超管",
           ms_state: true,
@@ -166,7 +177,7 @@ export default {
         {
           index: 5,
           username: "张三",
-          emial: "123@123.com",
+          email: "123@123.com",
           mobile: "13522233312",
           role_name: "超管",
           ms_state: true,
@@ -174,7 +185,7 @@ export default {
         {
           index: 6,
           username: "张三",
-          emial: "123@123.com",
+          email: "123@123.com",
           mobile: "13522233312",
           role_name: "超管",
           ms_state: true,
@@ -182,7 +193,7 @@ export default {
         {
           index: 7,
           username: "张三",
-          emial: "123@123.com",
+          email: "123@123.com",
           mobile: "13522233312",
           role_name: "超管",
           ms_state: true,
@@ -190,7 +201,7 @@ export default {
         {
           index: 8,
           username: "张三",
-          emial: "123@123.com",
+          email: "123@123.com",
           mobile: "13522233312",
           role_name: "超管",
           ms_state: true,
@@ -198,7 +209,7 @@ export default {
         {
           index: 9,
           username: "张三",
-          emial: "123@123.com",
+          email: "123@123.com",
           mobile: "13522233312",
           role_name: "超管",
           ms_state: true,
@@ -206,7 +217,7 @@ export default {
         {
           index: 10,
           username: "张三",
-          emial: "123@123.com",
+          email: "123@123.com",
           mobile: "13522233312",
           role_name: "超管",
           ms_state: true,
@@ -214,7 +225,7 @@ export default {
         {
           index: 11,
           username: "张三",
-          emial: "123@123.com",
+          email: "123@123.com",
           mobile: "13522233312",
           role_name: "超管",
           ms_state: true,
@@ -227,6 +238,34 @@ export default {
       },
       pageSize: 3,
       currentPage: 1,
+      bread_config: {
+        breadcrumb_child: "用户管理",
+        breadcrumb_grandson: "用户列表",
+      },
+      table_config: {
+        thead: [
+          { label: "#", prop: "index", width: "60", align: "center" },
+          { label: "姓名", prop: "username", width: "150", align: "center" },
+          { label: "邮箱", prop: "email", width: "200", align: "center" },
+          { label: "电话", prop: "mobile", width: "100", align: "center" },
+          { label: "角色", prop: "role_name", width: "100", align: "center" },
+          { label: "状态", prop: "ms_state", width: "200", align: "center" },
+          {
+            label: "禁启用",
+            prop: "state",
+            type: "slot",
+            slotName: "state",
+          },
+          {
+            label: "操作",
+            default: {
+              deleteButton: true,
+              editButton: true,
+              editButtonLink: "editUser",
+            },
+          },
+        ],
+      },
     };
   },
   methods: {
@@ -239,21 +278,21 @@ export default {
       this.currentPage = val;
     },
     // 修改状态
-    changeUserState(row){
+    changeUserState(row) {
       console.log(row);
     },
     // 编辑用户
-    editUser(index){
+    editUser(index) {
       console.log(index);
     },
     // 删除用户
-    delUser(index){
+    delUser(index) {
       console.log(index);
     },
     // 分配角色
-    disUser(index){
+    disUser(index) {
       console.log(index);
-    }
+    },
   },
 };
 </script>
