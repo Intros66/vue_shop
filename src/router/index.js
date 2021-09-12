@@ -63,6 +63,14 @@ const routes = [
           title: '权限列表'
         },
         component: () => import('../views/power/Rights.vue')
+      },
+      {
+        path: '/roles',
+        name: 'Roles',
+        meta: {
+          title: '角色列表'
+        },
+        component: () => import('../views/power/Roles.vue')
       }
     ]
   }

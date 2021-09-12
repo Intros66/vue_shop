@@ -11,7 +11,6 @@ const service = axios.create({
 
 // 请求拦截器
 service.interceptors.request.use( (config) => {
-    // 在发送请求前做什么
     config.headers['Authorization'] = getToken(); // 携带token
     config.headers['Username'] = getUsername(); // 携带token
     return config
@@ -23,7 +22,6 @@ service.interceptors.request.use( (config) => {
 // 响应拦截器
 service.interceptors.response.use( (response) => {
     const data = response.data;
-    // 不为 0，即接口异常
     if(data.meta.status !== 200){
         Message.error(data.meta.msg)
         return Promise.reject(data)

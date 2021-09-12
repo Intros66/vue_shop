@@ -1,8 +1,12 @@
 import service from '@/utils/request'
-export function getUser(data){
+export function getUser(){
     return service({
         method: 'get',
         url: '/users',
-        data
+        queryInfo: {
+            query: '',
+            pagenum: 1,
+            pagesize: 1
+        }
     })
 }

@@ -15,19 +15,6 @@
           <el-button type="primary">添加用户</el-button>
         </el-col>
       </el-row>
-      <!-- <Table :config="table_config" :data="tableData"> -->
-        <!--禁启用-->
-        <!-- <template v-slot:status="slotData">
-          <el-switch
-            :disabled="slotData.data.id == switch_disabled"
-            @change="changeUserState(slotData.data)"
-            v-model="slotData.data.status"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-          >
-          </el-switch>
-        </template>
-      </Table> -->
       <!-- 用户列表 -->
       <el-table
         :data="
@@ -112,7 +99,7 @@
                 type="warning"
                 icon="el-icon-setting"
                 size="mini"
-                @click="disUser(scope.row.index)"
+                @click="setRole(scope.row)"
               ></el-button>
             </el-tooltip>
           </template>
@@ -129,6 +116,35 @@
       :total="tableData.length"
     >
     </el-pagination>
+
+    <!-- 分配角色的对话框 -->
+    <el-dialog
+      title="分配角色"
+      :visible.sync="setRoleDialogVisible"
+      width="50%"
+    >
+      <div>
+        <p>当前的用户： {{ userInfo.username }}</p>
+        <p>当前的角色： {{ userInfo.role_name }}</p>
+        <p>
+          分配新角色： 
+          <el-select v-model="selectRoleId" placeholder="请选择" @change="showRoleId">
+            <el-option
+              v-for="item in rolesList"
+              :key="item.id"
+              :label="item.roleName"
+              :value="item.roleName">
+            </el-option>
+          </el-select>
+        </p>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="setRoleDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="saveRoleInfo"
+          >确 定</el-button
+        >
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -136,6 +152,7 @@
 import Breadcrumb from "../../components/breadcrumb/index.vue";
 import Table from "../../components/table/index.vue";
 import { getUser } from "../../api/user";
+import { getRoles, disRole } from "../../api/right";
 export default {
   name: "Users",
   components: { Breadcrumb, Table },
@@ -231,6 +248,13 @@ export default {
           ms_state: true,
         },
       ],
+      // 需要被分配角色的用户信息
+      userInfo: {},
+      // 角色列表
+      rolesList: [],
+      // 选择后的角色ID
+      selectRoleId: '',
+      // 页码查询
       queryInfo: {
         query: "",
         pagenum: 100,
@@ -238,6 +262,7 @@ export default {
       },
       pageSize: 3,
       currentPage: 1,
+      setRoleDialogVisible: false,
       bread_config: {
         breadcrumb_child: "用户管理",
         breadcrumb_grandson: "用户列表",
@@ -290,9 +315,24 @@ export default {
       console.log(index);
     },
     // 分配角色
-    disUser(index) {
-      console.log(index);
+    async setRole(userInfo) {
+      this.userInfo = userInfo
+      // 获取所有的角色列表
+      const {data: res} = await getRoles()
+      this.rolesList = res
+      this.setRoleDialogVisible = true
     },
+    // 点击按钮，分配角色
+    async saveRoleInfo(row){
+      if(!this.selectRoleId){
+        return this.$message.error('请选择要分配的角色！')
+      }
+      this.authName = this.selectRoleId
+      this.setRoleDialogVisible = false
+    },
+    showRoleId(val){
+      this.selectRoleId = val
+    }
   },
 };
 </script>
